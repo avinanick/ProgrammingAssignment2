@@ -4,19 +4,18 @@
 ## Write a short comment describing this function
 ## This function creates a matrix object that can cache its inverse
 makeCacheMatrix <- function(x = matrix()) {
-    m <- NULL
     inv <- NULL
     changed <- FALSE
-    setMatrix <- function(x) {
-        m <<- x
+    setMatrix <- function(m) {
+        x <<- m
         changed <<- TRUE
     }
     setInverse <- function() {
         changed <<- FALSE
-        inv <<- solve(m)
+        inv <<- solve(x)
     }
     getMatrix <- function() {
-        m
+        x
     }
     getInverse <- function() {
         inv
@@ -37,11 +36,12 @@ makeCacheMatrix <- function(x = matrix()) {
 ## if it has, and the matrix has not changed, returns the inverse matrix
 cacheSolve <- function(x, ...) {
     ## Return a matrix that is the inverse of 'x'
-    inv <- x$getInverse
-    if(!is.null(inv) && !x$isChanged) {
+    inv <- x$getInverse()
+    changed <- x$isChanged()
+    if(!is.null(inv) & !changed) {
         return(inv)
     }
-    x$setInverse
-    x$getInverse
-    
+    x$setInverse()
+    inv <- x$getInverse()
+    inv
 }
